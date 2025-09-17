@@ -44,7 +44,14 @@ h1 {
 
 .display-content {
     display:grid;
-    grid-template-columns: 2fr 1fr
+    grid-template-columns: 2fr 1fr;
     row-gap:3rem;
 
+}
+
+.container {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+    
 }
