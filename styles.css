@@ -1,0 +1,31 @@
+body {
+    background-color: hsl(239, 79%, 74%)
+}
+
+h1 {
+    color: hsl(0, 0%, 100%);
+   
+}
+
+.heading{
+    margin:auto;
+    padding: 0%;
+    background-color: aquamarine;
+    width: 500px;
+}
+
+.day {
+    width:50px;
+    height:100px;
+}
+
+.container {
+    display: flex;
+    
+}
+
+.class {
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:30px;
+}
