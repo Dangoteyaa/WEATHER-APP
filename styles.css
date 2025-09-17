@@ -14,18 +14,37 @@ h1 {
     width: 500px;
 }
 
-.day {
-    width:50px;
-    height:100px;
+.weather-display {
+    border:solid;
+    height: 100px;
+    width:200px;
+    grid-column: 
 }
 
-.container {
-    display: flex;
-    
+.details {
+    border:solid;
+    height: 100px;
+    width:200px;
+    grid-column:
 }
 
-.class {
+.days {
+    border:solid;
+    height: 100px;
+    width:200px;
+    grid-column:
+}
+
+.hourly-forecast {
+    border:solid;
+    height: 100px;
+    width:200px;
+    grid-column:
+}
+
+.display-content {
     display:grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap:30px;
+    grid-template-columns: 2fr 1fr
+    row-gap:3rem;
+
 }
