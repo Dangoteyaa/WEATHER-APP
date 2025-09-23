@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather App</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
@@ -20,22 +20,35 @@
   </header>
 
   <main>
-    <section class="card" id="current-weather">
-      <h2>Current Weather</h2>
-      <div id="currentWeatherData"></div>
-    </section>
+  <section class="card">
+    <div class="current-weather-box">
+      <div>
+        <h2 id="locationName">City, Country</h2>
+        <p id="date">Tuesday, Aug 5, 2025</p>
+      </div>
+      <div class="current-weather-temp" id="currentTemp">20°</div>
+    </div>
 
-    <section class="card">
-      <h2>7-Day Forecast</h2>
-      <div id="dailyForecastGrid" class="grid"></div>
-    </section>
+    <div class="info-grid">
+      <div class="info-card">Feels Like <br><span id="feelsLike">18°</span></div>
+      <div class="info-card">Humidity <br><span id="humidity">46%</span></div>
+      <div class="info-card">Wind <br><span id="wind">14 km/h</span></div>
+      <div class="info-card">Precipitation <br><span id="precip">0 mm</span></div>
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>Hourly Forecast</h2>
-      <div id="daySelector"></div>
-      <div id="hourlyForecastGrid" class="grid"></div>
-    </section>
-  </main>
+  <section class="card">
+    <h2>Daily forecast</h2>
+    <div class="daily-forecast" id="dailyForecastGrid"></div>
+  </section>
+
+  <section class="card">
+    <h2>Hourly forecast</h2>
+    <div id="daySelector"></div>
+    <div class="hourly-forecast" id="hourlyForecastGrid"></div>
+  </section>
+</main>
+
 
   <script src="script.js"></script>
 </body>

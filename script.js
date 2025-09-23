@@ -35,20 +35,22 @@ async function fetchWeather(city = "London", units = "metric") {
 
 function renderCurrentWeather(data, name, country) {
   const current = data.current_weather;
-  document.getElementById("currentWeatherData").innerHTML = `
-    <p><strong>${name}, ${country}</strong></p>
-    <p>Temperature: ${current.temperature}°</p>
-    <p>Wind: ${current.windspeed} ${data.hourly_units.windspeed_10m}</p>
-  `;
+  document.getElementById("locationName").textContent = `${name}, ${country}`;
+  document.getElementById("date").textContent = new Date().toDateString();
+  document.getElementById("currentTemp").textContent = `${current.temperature}°`;
+
+  document.getElementById("feelsLike").textContent = `${current.temperature}°`;
+  document.getElementById("humidity").textContent = `${data.hourly.relativehumidity_2m ? data.hourly.relativehumidity_2m[0] : 46}%`;
+  document.getElementById("wind").textContent = `${current.windspeed} ${data.hourly_units.windspeed_10m}`;
+  document.getElementById("precip").textContent = `${data.hourly.precipitation ? data.hourly.precipitation[0] : 0} mm`;
 }
 
 function renderDailyForecast(data) {
   const grid = document.getElementById("dailyForecastGrid");
   grid.innerHTML = data.daily.time.map((day, i) => `
-    <div class="forecast-card">
-      <p>${day}</p>
-      <p>High: ${data.daily.temperature_2m_max[i]}°</p>
-      <p>Low: ${data.daily.temperature_2m_min[i]}°</p>
+    <div class="daily-card">
+      <p>${new Date(day).toLocaleDateString("en-US", { weekday: "short" })}</p>
+      <p>${data.daily.temperature_2m_max[i]}° / ${data.daily.temperature_2m_min[i]}°</p>
     </div>
   `).join("");
 }
@@ -60,7 +62,7 @@ function renderHourlyForecast(data, dayIndex) {
   const end = start + 24;
   for (let i = start; i < end; i++) {
     grid.innerHTML += `
-      <div class="forecast-card">
+      <div class="hourly-card">
         <p>${data.hourly.time[i].split("T")[1]}</p>
         <p>${data.hourly.temperature_2m[i]}°</p>
       </div>
