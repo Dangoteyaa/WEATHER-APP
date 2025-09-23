@@ -1,58 +1,44 @@
 body {
-    background-color: hsl(239, 79%, 74%)
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  padding: 1rem;
+  color: #333;
 }
 
-h1 {
-    color: hsl(0, 0%, 100%);
-   
+header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-.heading{
-    margin:auto;
-    padding: 0%;
-    background-color: aquamarine;
-    width: 500px;
+.search {
+  display: flex;
+  gap: 0.5rem;
 }
 
-main {
-    display: grid;
-    grid-template-columns: 40px 40px auto 40px 40px;
-    grid-template-rows: 25% 100px 25% 25%;
+input, button, select {
+  padding: 0.5rem;
 }
 
-.weather-display {
-    border:solid 1px;
-    border-radius: 10px;
-    width:100px;
-    height:50px;
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.box {
-    border:solid 1px;
-    border-radius: 10px;
-    width:90px;
-    height:50px;
-    text-align: center;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.day {
-   border:solid 1px;
-    border-radius: 10px;
-    width:90px;
-    height:50px;
-    text-align: center; 
-}
-
-.time {
-    border:solid 1px;
-    border-radius: 10px;
-    width:90px;
-    height:50px;
-    text-align: center;
-}
-
-.hours {
-    border:solid 1px;
-    width:150px;
-    height:500px;
+.forecast-card {
+  background: #f0f0f0;
+  padding: 0.75rem;
+  border-radius: 6px;
+  text-align: center;
 }

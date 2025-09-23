@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -52,15 +52,60 @@
     </main>
 
     <footer>
-   <!-- <div class = "container">
+    <div class = "container">
     <div class="day" id="tue">Tue</div>
     <div class="day" id="wed">Wed</div>
     <div class="day" id="thur">Thur</div>
     <div class="day" id="fri">Fri</div>
     <div class="day" id="sat">Sat</div>
     <div class="day" id="sun">Sun</div>
-    </div> -->
+    </div> 
 
     </footer>
+</body>
+</html>
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Weather App</h1>
+    <div class="search">
+      <input type="text" id="searchInput" placeholder="Enter city...">
+      <button id="searchBtn">Search</button>
+      <select id="units">
+        <option value="metric">°C, km/h</option>
+        <option value="imperial">°F, mph</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <section id="current-weather" class="card">
+      <h2>Current Weather</h2>
+      <div id="currentWeatherData"></div>
+    </section>
+
+    <section id="daily-forecast" class="forecast">
+      <h2>7-Day Forecast</h2>
+      <div id="dailyForecastGrid"></div>
+    </section>
+
+    <section id="hourly-forecast" class="forecast">
+      <h2>Hourly Forecast</h2>
+      <div id="daySelector"></div>
+      <div id="hourlyForecastGrid"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
