@@ -1,123 +1,90 @@
-<!--<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <script src="app.js" defer></script>
-    <header>
-        <div class="heading">
-        <h1 id="intro"></h1>
-        <input type="text"><button>Submit</button>
-        </div>
-    </header>
-
-    <main>
-        <div class="display-content">
-            <div class="weather-display">weather display</div>
-            <div class="details">details</div>
-                <div class="info-container">
-                    <div class="box">Feels like</div>
-                    <div class="box">Humidity</div>
-                    <div class="box">Wind</div>
-                    <div class="box">Precipitation</div>
-                </div>
-            <div class="days">days</div>
-             <div class="container">
-                    <div class="day">Tue</div>
-                    <div class="day">Wed</div>
-                    <div class="day">Thur</div>
-                    <div class="day">Fri</div>
-                    <div class="day">Sat</div>
-                    <div class="day">Sun</div>
-                    <div class="day">Mon</div>
-                <div>
-            <div class="hourly-forecast">hourly forecast</div>
-                    <div class="hours">
-                        <div class="time">Hourly forecast</div>
-                        <div class="time">3 PM</div>
-                        <div class="time">4 PM</div>
-                        <div class="time">5 PM</div>
-                        <div class="time">6 PM</div>
-                        <div class="time">7 PM</div>
-                        <div class="time">8 PM</div>
-                        <div class="time">9 PM</div>
-                        <div class="time">10 PM</div>
-                    </div>
-               
-        </div>
-    </main>
-
-    <footer>
-    <div class = "container">
-    <div class="day" id="tue">Tue</div>
-    <div class="day" id="wed">Wed</div>
-    <div class="day" id="thur">Thur</div>
-    <div class="day" id="fri">Fri</div>
-    <div class="day" id="sat">Sat</div>
-    <div class="day" id="sun">Sun</div>
-    </div> 
-
-    </footer>
-</body>
-</html>
-
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weather App</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Weather Now</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="header">
-    <h1>Weather App</h1>
-    <div class="search">
-      <input type="text" id="searchInput" placeholder="Enter city...">
-      <button id="searchBtn">Search</button>
-      <select id="units">
-        <option value="metric">°C, km/h</option>
-        <option value="imperial">°F, mph</option>
-      </select>
+  <div class="page-bg">
+    <div class="app">
+      <header class="app-header">
+        <div class="brand">
+          <span class="logo">🌞</span>
+          <span class="brand-text">Weather Now</span>
+        </div>
+
+        <div class="units-btn">
+          <select id="unitsSelect" aria-label="Units">
+            <option value="metric">Metric — °C, km/h</option>
+            <option value="imperial">Imperial — °F, mph</option>
+          </select>
+        </div>
+      </header>
+
+      <section class="hero">
+        <h1>How's the sky looking today?</h1>
+
+        <div class="search-row">
+          <input id="searchInput" placeholder="Search for a place..." />
+          <button id="searchBtn">Search</button>
+        </div>
+      </section>
+
+      <main class="grid-layout">
+        <!-- Left column -->
+        <div class="left-col">
+          <section class="card current-card">
+            <div class="current-left">
+              <div class="location" id="locationName">City, Country</div>
+              <div class="date" id="dateText">Tuesday, Aug 5, 2025</div>
+            </div>
+
+            <div class="current-right">
+              <div class="weather-icon" id="currentIcon">☀️</div>
+              <div class="temp-large" id="currentTemp">20°</div>
+            </div>
+          </section>
+
+          <section class="info-row" aria-label="metrics">
+            <div class="info-card">
+              <div class="label">Feels Like</div>
+              <div class="value" id="feelsLike">18°</div>
+            </div>
+            <div class="info-card">
+              <div class="label">Humidity</div>
+              <div class="value" id="humidity">46%</div>
+            </div>
+            <div class="info-card">
+              <div class="label">Wind</div>
+              <div class="value" id="wind">14 km/h</div>
+            </div>
+            <div class="info-card">
+              <div class="label">Precipitation</div>
+              <div class="value" id="precip">0 mm</div>
+            </div>
+          </section>
+
+          <section class="card daily-card-section">
+            <h3 class="section-title">Daily forecast</h3>
+            <div class="daily-scroll" id="dailyForecastGrid"></div>
+          </section>
+        </div>
+
+        <!-- Right column -->
+        <aside class="right-col">
+          <section class="card hourly-panel">
+            <div class="hourly-header">
+              <h3>Hourly forecast</h3>
+              <select id="daySelector" aria-label="Select day"></select>
+            </div>
+            <div class="hourly-list" id="hourlyForecastGrid"></div>
+          </section>
+        </aside>
+      </main>
     </div>
-  </header>
-
-  <main>
-  <section class="card">
-    <div class="current-weather-box">
-      <div>
-        <h2 id="locationName">City, Country</h2>
-        <p id="date">Tuesday, Aug 5, 2025</p>
-      </div>
-      <div class="current-weather-temp" id="currentTemp">20°</div>
-    </div>
-
-    <div class="info-grid">
-      <div class="info-card">Feels Like <br><span id="feelsLike">18°</span></div>
-      <div class="info-card">Humidity <br><span id="humidity">46%</span></div>
-      <div class="info-card">Wind <br><span id="wind">14 km/h</span></div>
-      <div class="info-card">Precipitation <br><span id="precip">0 mm</span></div>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>Daily forecast</h2>
-    <div class="daily-forecast" id="dailyForecastGrid"></div>
-  </section>
-
-  <section class="card">
-    <h2>Hourly forecast</h2>
-    <div id="daySelector"></div>
-    <div class="hourly-forecast" id="hourlyForecastGrid"></div>
-  </section>
-</main>
-
+  </div>
 
   <script src="script.js"></script>
 </body>
