@@ -1,85 +1,92 @@
-/* Simple dark-themed weather app adapted to the provided mockup.
-   Uses open-meteo geocoding + forecast APIs.
-*/
+const searchBtn = document.getElementById("searchBtn");
+const searchInput = document.getElementById("searchInput");
+const unitsDropdown = document.getElementById("units");
 
-const searchInput = document.getElementById('searchInput');
-const searchBtn = document.getElementById('searchBtn');
-const unitsSelect = document.getElementById('unitsSelect');
+async function fetchWeather(city = "London", units = "metric") {
+  try {
+    // Geocoding
+    const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`);
+    const geoData = await geoRes.json();
+    if (!geoData.results || geoData.results.length === 0) {
+      alert("City not found!");
+      return;
+    }
 
-const locationNameEl = document.getElementById('locationName');
-const dateTextEl = document.getElementById('dateText');
-const currentTempEl = document.getElementById('currentTemp');
-const currentIconEl = document.getElementById('currentIcon');
-const feelsLikeEl = document.getElementById('feelsLike');
-const humidityEl = document.getElementById('humidity');
-const windEl = document.getElementById('wind');
-const precipEl = document.getElementById('precip');
+    const { latitude, longitude, name, country } = geoData.results[0];
 
-const dailyGrid = document.getElementById('dailyForecastGrid');
-const hourlyGrid = document.getElementById('hourlyForecastGrid');
-const daySelector = document.getElementById('daySelector');
+    // Unit handling
+    const tempUnit = units === "metric" ? "celsius" : "fahrenheit";
+    const windUnit = units === "metric" ? "kmh" : "mph";
 
-let latestWeather = null; // keep data for interactivity
-let latestLocation = { name: 'London', country: '' };
+    // Weather API
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,weathercode&hourly=temperature_2m,weathercode&temperature_unit=${tempUnit}&windspeed_unit=${windUnit}&timezone=auto`;
+    const weatherRes = await fetch(url);
+    const weatherData = await weatherRes.json();
 
-/* Map Open-Meteo weathercode to emoji icon (simple, replace with SVG if you prefer) */
-function weatherCodeToEmoji(code) {
-  if (code === 0) return '☀️';
-  if (code === 1 || code === 2) return '🌤️';
-  if (code === 3) return '⛅';
-  if (code === 45 || code === 48) return '🌫️';
-  if (code >= 51 && code <= 67) return '🌦️';
-  if (code >= 80 && code <= 82) return '🌧️';
-  if (code >= 71 && code <= 77) return '🌨️';
-  if (code >= 95) return '⛈️';
-  return '☁️';
-}
-
-/* Find indices of hourly array for a given date string (YYYY-MM-DD) */
-function hourlyIndicesForDate(weatherData, dayDate) {
-  const times = weatherData.hourly.time;
-  const indices = [];
-  for (let i = 0; i < times.length; i++) {
-    if (times[i].startsWith(dayDate)) indices.push(i);
+    renderCurrentWeather(weatherData, name, country);
+    renderDailyForecast(weatherData);
+    renderHourlyForecast(weatherData, 0);
+    renderDaySelector(weatherData);
+  } catch (err) {
+    console.error(err);
+    alert("Failed to fetch weather.");
   }
-  return indices;
 }
 
-/* Render current weather card + metrics */
 function renderCurrentWeather(data, name, country) {
-  latestWeather = data;
-  latestLocation = { name, country };
-
   const current = data.current_weather;
-  locationNameEl.textContent = `${name}${country ? ', ' + country : ''}`;
-  dateTextEl.textContent = new Date(current.time).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
-  currentTempEl.textContent = `${Math.round(current.temperature)}°`;
-  currentIconEl.textContent = weatherCodeToEmoji(current.weathercode);
-
-  // Feels like - Open-Meteo doesn't provide "feels like" in current_weather; approximate with current temp
-  feelsLikeEl.textContent = `${Math.round(current.temperature)}°`;
-
-  // For humidity/precip/wind we use hourly arrays: find current hour index
-  const nowIso = current.time; // e.g., "2025-08-05T14:00"
-  const hrIndex = data.hourly.time.indexOf(nowIso);
-  const humidity = hrIndex >= 0 && data.hourly.relativehumidity_2m ? data.hourly.relativehumidity_2m[hrIndex] : null;
-  const precip = hrIndex >= 0 && data.hourly.precipitation ? data.hourly.precipitation[hrIndex] : null;
-  const wind = current.windspeed;
-
-  humidityEl.textContent = humidity !== null ? `${Math.round(humidity)}%` : '—';
-  precipEl.textContent = precip !== null ? `${precip} mm` : '—';
-  windEl.textContent = wind !== undefined ? `${Math.round(wind)} ${data.hourly_units ? data.hourly_units.windspeed_10m : ''}` : '—';
+  document.getElementById("currentWeatherData").innerHTML = `
+    <p><strong>${name}, ${country}</strong></p>
+    <p>Temperature: ${current.temperature}°</p>
+    <p>Wind: ${current.windspeed} ${data.hourly_units.windspeed_10m}</p>
+  `;
 }
 
-/* Render daily forecast (small horizontal cards) */
 function renderDailyForecast(data) {
-  const days = data.daily.time;
-  dailyGrid.innerHTML = days.map((d, i) => {
-    const max = Math.round(data.daily.temperature_2m_max[i]);
-    const min = Math.round(data.daily.temperature_2m_min[i]);
-    const wc = data.daily.weathercode ? data.daily.weathercode[i] : 0;
-    const short = new Date(d).toLocaleDateString(undefined, { weekday: 'short' });
-    return `
-      <div class="daily-item">
-        <div class="day">${short}</div>
-        <d
+  const grid = document.getElementById("dailyForecastGrid");
+  grid.innerHTML = data.daily.time.map((day, i) => `
+    <div class="forecast-card">
+      <p>${day}</p>
+      <p>High: ${data.daily.temperature_2m_max[i]}°</p>
+      <p>Low: ${data.daily.temperature_2m_min[i]}°</p>
+    </div>
+  `).join("");
+}
+
+function renderHourlyForecast(data, dayIndex) {
+  const grid = document.getElementById("hourlyForecastGrid");
+  grid.innerHTML = "";
+  const start = dayIndex * 24;
+  const end = start + 24;
+  for (let i = start; i < end; i++) {
+    grid.innerHTML += `
+      <div class="forecast-card">
+        <p>${data.hourly.time[i].split("T")[1]}</p>
+        <p>${data.hourly.temperature_2m[i]}°</p>
+      </div>
+    `;
+  }
+}
+
+function renderDaySelector(data) {
+  const selector = document.getElementById("daySelector");
+  selector.innerHTML = data.daily.time.map((day, i) => `
+    <button onclick="renderHourlyForecast(window.weatherData, ${i})">${day}</button>
+  `).join("");
+  window.weatherData = data; // Save globally for reuse
+}
+
+// Event listeners
+searchBtn.addEventListener("click", () => {
+  const city = searchInput.value.trim();
+  const units = unitsDropdown.value;
+  if (city) fetchWeather(city, units);
+});
+
+unitsDropdown.addEventListener("change", () => {
+  const city = searchInput.value.trim() || "London";
+  fetchWeather(city, unitsDropdown.value);
+});
+
+// Default
+fetchWeather();
